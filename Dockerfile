@@ -5,6 +5,10 @@ FROM ubuntu
 
 MAINTAINER behring <behring.zhao@gmail.com>
 
+ARG emulator_version=24
+ARG emulator_arch=armeabi-v7a
+ARG emulator_api=default
+
 # Specially for SSH access and port redirection
 ENV ROOTPASSWORD android
 
@@ -38,17 +42,13 @@ ENV PATH $ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 # Export JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 
-# Install latest android tools and system images（docker unsupport x86 emulator, android-22's armeabi-v7a）
+# Install latest android tools and system images（docker unsupport x86 emulator, android-19 to android-24's armeabi-v7a）
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --list && \
     yes | $ANDROID_HOME/tools/bin/sdkmanager 'emulator' \ 
     'platform-tools' \ 
-    'platforms;android-19' \
-    'platforms;android-23' \
-    'platforms;android-24' \
-    'build-tools;24.0.3' \
-    'system-images;android-19;default;armeabi-v7a' \
-    'system-images;android-23;default;armeabi-v7a' \
-    'system-images;android-24;default;armeabi-v7a'
+    "platforms;android-${emulator_version}" \
+    "build-tools;${emulator_version}.0.3" \
+    "system-images;android-${emulator_version};${emulator_api};${emulator_arch}"
 
 # Create fake keymap file
 RUN mkdir /usr/local/android-sdk/tools/keymaps && \
@@ -66,4 +66,4 @@ ENV NOTVISIBLE "in users profile"
 # Add entrypoint
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh", ${emulator_version}, ${emulator_api}, ${emulator_arch}]
