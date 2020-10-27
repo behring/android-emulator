@@ -66,4 +66,8 @@ ENV NOTVISIBLE "in users profile"
 # Add entrypoint
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh", ${emulator_version}, ${emulator_api}, ${emulator_arch}]
+
+ENV VERSION $emulator_version
+ENV ARCH $emulator_arch
+ENV API $emulator_api
+ENTRYPOINT /entrypoint.sh $VERSION $API $ARCH
