@@ -31,6 +31,6 @@ socat tcp-listen:5555,bind=$ip,fork tcp:127.0.0.1:5555 &
 socat tcp-listen:80,bind=$ip,fork tcp:127.0.0.1:80 &
 socat tcp-listen:443,bind=$ip,fork tcp:127.0.0.1:443 &
 
-echo no | /usr/local/android-sdk/tools/bin/avdmanager create avd -f -n $NAME -k "system-images;android-$VERSION;$API;$ARCH"
-/usr/local/android-sdk/tools/emulator -avd $NAME -noaudio -no-window -gpu off
-
+#export QT_DEBUG_PLUGINS=1
+echo no | $ANDROID_HOME/tools/bin/avdmanager create avd -f -n $NAME -k "system-images;android-$VERSION;$API;$ARCH"
+$ANDROID_HOME/emulator/emulator -avd $NAME -noaudio -no-window -gpu off

@@ -21,14 +21,9 @@ EXPOSE 5900
 EXPOSE 80
 EXPOSE 443
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections && \
-    echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
-
 # Update packages
 RUN apt-get -y update && \
-    apt-get -y install unzip ssh net-tools openssh-server socat curl openjdk-8-jdk vim && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get -y install unzip ssh net-tools openssh-server socat curl openjdk-8-jdk vim
 
 # Install android sdk
 RUN wget -P /usr/local/ https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip && \
